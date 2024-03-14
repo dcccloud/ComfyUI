@@ -185,8 +185,18 @@ def load_extra_path_config(yaml_path):
                 logging.info("Adding extra search path {} {}".format(x, full_path))
                 folder_paths.add_model_folder_path(x, full_path)
 
+import yaml
+def set_mdoel_base_path(path):
+    base_path = folder_paths.base_path
+    with open(os.path.join(base_path,'extra_model_paths.yaml'),'r') as f:
+        data = yaml.safe_load(f)
+    data['comfyui']['base_path'] = path
+    with open(os.path.join(base_path,'extra_model_paths.yaml'),'w') as f:
+        yaml.dump(data,f)
 
 if __name__ == "__main__":
+    model_base_path = os.environ.get('MODEL_BASE_PATH')
+    set_mdoel_base_path(model_base_path)
     if args.temp_directory:
         temp_dir = os.path.join(os.path.abspath(args.temp_directory), "temp")
         logging.info(f"Setting temp directory to: {temp_dir}")
